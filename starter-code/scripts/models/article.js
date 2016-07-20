@@ -90,10 +90,10 @@
       return uniqueAuthors;
     }, []);
     return authors;
-    //return       TODO: map our collection
-      //return    TODO: return just the author names
+    //return       TODO DONE: map our collection
+      //return    TODO DONE: return just the author names
 
-    /* TODO: For our `reduce` that we'll chain here -- since we are trying to
+    /* TODO DONE: For our `reduce` that we'll chain here -- since we are trying to
         return an array, we'll need to specify an accumulator type...
         What data type should this accumulator be and where is it placed? */
   };
@@ -102,14 +102,18 @@
     /* TODO: Transform each author element into a new object with 2 properties:
         One for the author's name, and one for the total number of words across
         the matching articles written by the specified author. */
-    return Article.allAuthors().map(function(author) {
+    return Article.allAuthors().map(function(authorName) {
       return {
-        // name:
-        // numWords: someCollection.filter(function(curArticle) {
-        //  what do we return here to check for matching authors?
-        // })
-        // .map(...) // use .map to return the author's word count for each article's body (hint: regexp!).
-        // .reduce(...) // squash this array of numbers into one big number!
+        name: authorName,
+        numWords: Article.allArticles.filter(function(curArticle) {
+          return curArticle.author === authorName;
+        })
+        .map(function(curArticle) {
+          return curArticle.body.match(/\w+/g).length;
+        }) // use .map to return the author's word count for each article's body (hint: regexp!).
+        .reduce(function(accum, current) {
+          return accum + current;
+        }, 0) // squash this array of numbers into one big number!
       };
     });
   };
